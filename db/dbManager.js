@@ -4,42 +4,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importDefault(require("sequelize"));
-const sequelize = new sequelize_1.default('dev', 'postgres', 'postgres', {
-    dialect: 'postgres',
-    host: 'postgres',
+const sequelize = new sequelize_1.default('track_wallet', 'root', 'root', {
+    dialect: 'mysql',
+    host: 'localhost',
 });
-const UserWallet = sequelize.define('userwallet', {
-    wallet_address: sequelize_1.default.STRING,
-    email_address: sequelize_1.default.STRING,
+const walletEvent = sequelize.define('wallet_event', {
+    address: {
+        type: sequelize_1.default.STRING,
+        allowNull: false
+    },
+    tx_hash: {
+        type: sequelize_1.default.STRING,
+        allowNull: true,
+        defaultValue: null
+    },
+    completed_on: {
+        type: sequelize_1.default.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    completed: {
+        type: sequelize_1.default.TINYINT,
+        allowNull: false,
+        defaultValue: 0
+    }
 }, {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 });
-exports.UserWallet = UserWallet;
-UserWallet.sync();
-function insert_user_wallet(wallet_address, email_address) {
-    return UserWallet.create({
-        wallet_address: wallet_address,
-        email_address: email_address,
+walletEvent.sync();
+function insert_wallet_event(wallet_address, txhash, completed) {
+    return walletEvent.create({
+        address: wallet_address,
+        tx_hash: txhash,
+        completed_on: sequelize.fn('NOW'),
+        completed: completed
     });
 }
-exports.insert_user_wallet = insert_user_wallet;
-function get_user_wallet(wallet_address) {
-    return UserWallet.findOne({
-        where: {
-            wallet_address: wallet_address,
-        },
-        order: [['created_at', 'DESC']]
-    });
-}
-exports.get_user_wallet = get_user_wallet;
-function update_user_wallet(id, email_address) {
-    return UserWallet.update({
-        email_address: email_address,
-    }, {
-        where: {
-            id: id,
-        }
-    });
-}
-exports.update_user_wallet = update_user_wallet;
+exports.insert_wallet_event = insert_wallet_event;

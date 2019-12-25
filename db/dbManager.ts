@@ -1,52 +1,45 @@
 import Sequelize from 'sequelize';
-const sequelize = new Sequelize('dev', 'postgres', 'postgres', {
-	dialect: 'postgres',
-	host:'postgres',
-	// host:'localhost',
+const sequelize = new Sequelize('track_wallet', 'root', 'root', {
+	dialect: 'mysql',
+	host:'localhost',
 });
 
-const UserWallet = sequelize.define('userwallet', {
-	wallet_address: Sequelize.STRING,
-	email_address: Sequelize.STRING,
-}, 
-{
+const walletEvent = sequelize.define('wallet_event', {
+	address: {
+		type: Sequelize.STRING,
+		allowNull: false
+	},
+	tx_hash: {
+		type: Sequelize.STRING,
+		allowNull: true,
+		defaultValue: null
+	},
+	completed_on: {
+		type: Sequelize.DATE,
+		allowNull: true,
+		defaultValue: null
+	},
+	completed: {
+		type: Sequelize.TINYINT,
+		allowNull: false,
+		defaultValue: 0
+	}
+}, {
 	createdAt: 'created_at',
 	updatedAt: 'updated_at',
 });
+walletEvent.sync();
 
-UserWallet.sync();
+function insert_wallet_event(wallet_address, txhash, completed) {
 
-function insert_user_wallet(wallet_address, email_address) {
-
-	return UserWallet.create({
-		wallet_address: wallet_address,
-		email_address: email_address,
-	});
-}
-
-function get_user_wallet(wallet_address) {
-	return UserWallet.findOne({
-		where: {
-			wallet_address: wallet_address,
-		},
-		order: [['created_at', 'DESC']]
-	});
-}
-
-function update_user_wallet(id, email_address) {
-	return UserWallet.update({
-		email_address: email_address,
-	}, 
-	{
-		where: {
-			id: id,
-		}
+	return walletEvent.create({
+		address: wallet_address,
+		tx_hash: txhash,
+		completed_on: sequelize.fn('NOW'),
+		completed: completed
 	});
 }
 
 export {
-  	UserWallet,
-  	insert_user_wallet,
-  	get_user_wallet,
-  	update_user_wallet
+  	insert_wallet_event
 };
