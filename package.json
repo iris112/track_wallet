@@ -1,0 +1,31 @@
+{
+  "name": "track_wallet",
+  "version": "1.0.0",
+  "description": "Tracking of the wallet",
+  "main": "event.js",
+  "scripts": {
+    "test": "gulp",
+    "postinstall": "rm -f node_modules/web3-eth/types/index.d.ts",
+    "start": "node event.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iris112/track_wallet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zeus16/KYC3_DAPP/issues"
+  },
+  "homepage": "https://github.com/zeus16/KYC3_DAPP#readme",
+  "dependencies": {
+    "decimal.js": "^10.1.1",
+    "dotenv": "^6.2.0",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^5.0.0",
+    "http": "0.0.0",
+    "sequelize": "^4.41.2",
+    "typescript": "^3.3.3333",
+    "web3": "^1.0.0-beta.48"
+  }
+}
