@@ -3,10 +3,11 @@ import Decimal from 'decimal.js';
 import * as dbManager from './db/dbManager';
 import request from 'request';
 import * as dotenv from 'dotenv';
-import wallet from './wallet';
+// import wallet from './wallet';
 
 dotenv.config();
 const web3Http = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/21d44f97cb3f4f2e8c113c76d05bbf77'));
+var wallets = [];
 var provider;
 var web3 = undefined;
 var prevTxHash = '';
@@ -48,11 +49,11 @@ function validateTransaction(trx) {
   if (!toValid) 
   	return {result: false, address: ''};
 
-  const toWallet = wallet.includes(trx.to.toLowerCase());
+  const toWallet = wallets.includes(trx.to.toLowerCase());
   if (toWallet)
   	return {result: true, address: trx.to};
 
-  const fromWallet = wallet.includes(trx.from.toLowerCase());
+  const fromWallet = wallets.includes(trx.from.toLowerCase());
   if (fromWallet)
   	return {result: true, address: trx.from};
 
@@ -85,7 +86,8 @@ function confirmEtherTransaction(txHash, confirmations = 1, wallet_address) {
 			// const balance = await web3Http.eth.getBalance(wallet_address);
 			// if (balance < ethToWei(process.env.LIMIT_BALANCE))
 			console.log("Add Wallet Event", wallet_address, txHash);
-			dbManager.insert_wallet_event(wallet_address, txHash, 1);
+			dbManager.insert_wallet_event(wallet_address, txHash, 0);
+			return;
 
 		}
 
@@ -128,8 +130,9 @@ function watchEtherTransfers() {
 	})
 }
 
-function listenEvent() {
+async function listenEvent() {
 	console.log('Listening token transfer event');
+	wallets = await dbManager.get_all_wallet_address();
 	watchEtherTransfers();
 }
 

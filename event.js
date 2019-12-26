@@ -22,9 +22,10 @@ const web3_1 = __importDefault(require("web3"));
 const decimal_js_1 = __importDefault(require("decimal.js"));
 const dbManager = __importStar(require("./db/dbManager"));
 const dotenv = __importStar(require("dotenv"));
-const wallet_1 = __importDefault(require("./wallet"));
+// import wallet from './wallet';
 dotenv.config();
 const web3Http = new web3_1.default(new web3_1.default.providers.HttpProvider('https://ropsten.infura.io/v3/21d44f97cb3f4f2e8c113c76d05bbf77'));
+var wallets = [];
 var provider;
 var web3 = undefined;
 var prevTxHash = '';
@@ -57,10 +58,10 @@ function validateTransaction(trx) {
     const toValid = trx.to !== null;
     if (!toValid)
         return { result: false, address: '' };
-    const toWallet = wallet_1.default.includes(trx.to.toLowerCase());
+    const toWallet = wallets.includes(trx.to.toLowerCase());
     if (toWallet)
         return { result: true, address: trx.to };
-    const fromWallet = wallet_1.default.includes(trx.from.toLowerCase());
+    const fromWallet = wallets.includes(trx.from.toLowerCase());
     if (fromWallet)
         return { result: true, address: trx.from };
     return { result: false, address: '' };
@@ -88,7 +89,8 @@ function confirmEtherTransaction(txHash, confirmations = 1, wallet_address) {
             // const balance = await web3Http.eth.getBalance(wallet_address);
             // if (balance < ethToWei(process.env.LIMIT_BALANCE))
             console.log("Add Wallet Event", wallet_address, txHash);
-            dbManager.insert_wallet_event(wallet_address, txHash, 1);
+            dbManager.insert_wallet_event(wallet_address, txHash, 0);
+            return;
         }
         return confirmEtherTransaction(txHash, confirmations, wallet_address);
     }), 10 * 1000);
@@ -124,7 +126,10 @@ function watchEtherTransfers() {
     }));
 }
 function listenEvent() {
-    console.log('Listening token transfer event');
-    watchEtherTransfers();
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log('Listening token transfer event');
+        wallets = yield dbManager.get_all_wallet_address();
+        watchEtherTransfers();
+    });
 }
 listenEvent();
