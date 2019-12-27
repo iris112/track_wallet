@@ -60,7 +60,7 @@ function insert_wallet_event(wallet_address, txhash, completed) {
 }
 
 function get_all_wallet_address() {
-  return walletList.findAll({attributes: ['address']});
+  return walletList.findAll();
 }
 
 export {

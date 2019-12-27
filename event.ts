@@ -132,7 +132,10 @@ function watchEtherTransfers() {
 
 async function listenEvent() {
 	console.log('Listening token transfer event');
-	wallets = await dbManager.get_all_wallet_address();
+	let wallet_addresses = await dbManager.get_all_wallet_address();
+	for (let i = 0; i < wallet_addresses.length; i++)
+		wallets.push(wallet_addresses[i].address);
+	console.log(wallets);
 	watchEtherTransfers();
 }
 

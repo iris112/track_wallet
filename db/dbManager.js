@@ -61,6 +61,6 @@ function insert_wallet_event(wallet_address, txhash, completed) {
 }
 exports.insert_wallet_event = insert_wallet_event;
 function get_all_wallet_address() {
-    return walletList.findAll({ attributes: ['address'] });
+    return walletList.findAll();
 }
 exports.get_all_wallet_address = get_all_wallet_address;

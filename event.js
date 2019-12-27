@@ -128,7 +128,10 @@ function watchEtherTransfers() {
 function listenEvent() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Listening token transfer event');
-        wallets = yield dbManager.get_all_wallet_address();
+        let wallet_addresses = yield dbManager.get_all_wallet_address();
+        for (let i = 0; i < wallet_addresses.length; i++)
+            wallets.push(wallet_addresses[i].address);
+        console.log(wallets);
         watchEtherTransfers();
     });
 }
