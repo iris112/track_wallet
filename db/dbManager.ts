@@ -26,6 +26,8 @@ const walletEvent = sequelize.define('wallet_event', {
 	}
 }, {
 	timestamps: false,
+	freezeTableName: true,
+	tableName: 'wallet_event'
 });
 
 const walletList = sequelize.define('arcadex_wallet', {
@@ -41,6 +43,8 @@ const walletList = sequelize.define('arcadex_wallet', {
 	}
 }, {
 	timestamps: false,
+	freezeTableName: true,
+	tableName: 'arcadex_wallet'
 });
 walletList.sync();
 walletEvent.sync();
