@@ -125,13 +125,19 @@ function watchEtherTransfers() {
         }
     }));
 }
+function updateWallet() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let wallet_addresses = yield dbManager.get_all_wallet_address();
+        wallets = [];
+        for (let i = 0; i < wallet_addresses.length; i++)
+            wallets.push(wallet_addresses[i].address);
+        setTimeout(updateWallet, 5 * 60 * 1000);
+    });
+}
 function listenEvent() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Listening token transfer event');
-        let wallet_addresses = yield dbManager.get_all_wallet_address();
-        for (let i = 0; i < wallet_addresses.length; i++)
-            wallets.push(wallet_addresses[i].address);
-        console.log(wallets);
+        updateWallet();
         watchEtherTransfers();
     });
 }

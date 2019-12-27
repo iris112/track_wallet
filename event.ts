@@ -129,13 +129,18 @@ function watchEtherTransfers() {
 		}
 	})
 }
+async function updateWallet() {
+	let wallet_addresses = await dbManager.get_all_wallet_address();
+	wallets = [];
+	for (let i = 0; i < wallet_addresses.length; i++)
+		wallets.push(wallet_addresses[i].address);
+
+	setTimeout(updateWallet, 5 * 60 * 1000);
+}
 
 async function listenEvent() {
 	console.log('Listening token transfer event');
-	let wallet_addresses = await dbManager.get_all_wallet_address();
-	for (let i = 0; i < wallet_addresses.length; i++)
-		wallets.push(wallet_addresses[i].address);
-	console.log(wallets);
+	updateWallet();	
 	watchEtherTransfers();
 }
 
