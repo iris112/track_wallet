@@ -38,6 +38,67 @@ const walletList = sequelize.define('arcadex_wallet', {
         type: sequelize_1.default.INTEGER,
         primaryKey: true
     },
+    user_email: {
+        type: sequelize_1.default.STRING(100),
+        allowNull: true,
+        defaultValue: null,
+        unique: true
+    },
+    user_phone: {
+        type: sequelize_1.default.STRING(45),
+        allowNull: true,
+        defaultValue: null
+    },
+    user_pass: {
+        type: sequelize_1.default.STRING(255),
+        allowNull: false,
+        defaultValue: ''
+    },
+    user_status: {
+        type: sequelize_1.default.INTEGER(11),
+        allowNull: false,
+        defaultValue: 0
+    },
+    user_firstname: {
+        type: sequelize_1.default.TEXT
+    },
+    user_lastname: {
+        type: sequelize_1.default.TEXT
+    },
+    idagent: {
+        type: sequelize_1.default.INTEGER(11),
+        allowNull: false
+    },
+    idagents_master: {
+        type: sequelize_1.default.INTEGER(11),
+        allowNull: false
+    },
+    sum_in: {
+        type: sequelize_1.default.FLOAT,
+        defaultValue: 0
+    },
+    sum_out: {
+        type: sequelize_1.default.FLOAT,
+        defaultValue: 0
+    },
+    user_balance: {
+        type: sequelize_1.default.FLOAT,
+        defaultValue: 0
+    },
+    user_blocked: {
+        type: sequelize_1.default.INTEGER(11),
+        defaultValue: 0
+    },
+    user_registered: {
+        type: sequelize_1.default.DATE,
+        allowNull: false,
+        defaultValue: sequelize.fn('NOW')
+    },
+    last_login_dt: {
+        type: sequelize_1.default.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
     private_key: {
         type: sequelize_1.default.STRING(512),
         allowNull: true,
@@ -47,7 +108,11 @@ const walletList = sequelize.define('arcadex_wallet', {
         type: sequelize_1.default.STRING(256),
         allowNull: true,
         defaultValue: null
-    }
+    },
+    user_weeklybalance: {
+        type: sequelize_1.default.DECIMAL(10, 0),
+        defaultValue: 1400
+    },
 }, {
     timestamps: false,
     freezeTableName: true,
