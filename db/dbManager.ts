@@ -31,6 +31,10 @@ const walletEvent = sequelize.define('wallet_event', {
 });
 
 const walletList = sequelize.define('arcadex_wallet', {
+	user_id: {
+		type: Sequelize.INTEGER,
+		primaryKey: true
+	},
 	private_key: {
 		type: Sequelize.STRING(512),
 		allowNull: true,
