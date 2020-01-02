@@ -81,9 +81,11 @@ function getConfirmations(txHash) {
 function confirmEtherTransaction(txHash, confirmations = 1, wallet_address) {
     setTimeout(() => __awaiter(this, void 0, void 0, function* () {
         // Get current number of confirmations and compare it with sought-for value
-        const trxConfirmations = yield getConfirmations(txHash);
-        console.log('Transaction with hash ' + txHash + ' has ' + trxConfirmations + ' confirmation(s)');
-        if (trxConfirmations >= confirmations) {
+        const trx = yield web3Http.eth.getTransaction(txHash);
+        // const trxConfirmations = await getConfirmations(txHash);
+        // console.log('Transaction with hash ' + txHash + ' has ' + trxConfirmations + ' confirmation(s)');
+        if (trx.blockNumber !== null) {
+            // if (trx.blockNumber >= confirmations) {
             console.log('Transaction with hash ' + txHash + ' has been successfully confirmed');
             // // Get Balance
             // const balance = await web3Http.eth.getBalance(wallet_address);
@@ -93,7 +95,7 @@ function confirmEtherTransaction(txHash, confirmations = 1, wallet_address) {
             return;
         }
         return confirmEtherTransaction(txHash, confirmations, wallet_address);
-    }), 10 * 1000);
+    }), 300 * 1000);
 }
 function watchEtherTransfers() {
     const subscription = web3.eth.subscribe('pendingTransactions');
