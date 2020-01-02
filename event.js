@@ -22,7 +22,7 @@ const web3_1 = __importDefault(require("web3"));
 const decimal_js_1 = __importDefault(require("decimal.js"));
 const dbManager = __importStar(require("./db/dbManager"));
 const dotenv = __importStar(require("dotenv"));
-// import wallet from './wallet';
+// import wallets from './wallet';
 dotenv.config();
 const web3Http = new web3_1.default(new web3_1.default.providers.HttpProvider('https://ropsten.infura.io/v3/21d44f97cb3f4f2e8c113c76d05bbf77'));
 var wallets = [];
@@ -95,7 +95,7 @@ function confirmEtherTransaction(txHash, confirmations = 1, wallet_address) {
             return;
         }
         return confirmEtherTransaction(txHash, confirmations, wallet_address);
-    }), 300 * 1000);
+    }), 120 * 1000);
 }
 function watchEtherTransfers() {
     const subscription = web3.eth.subscribe('pendingTransactions');

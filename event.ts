@@ -3,7 +3,7 @@ import Decimal from 'decimal.js';
 import * as dbManager from './db/dbManager';
 import request from 'request';
 import * as dotenv from 'dotenv';
-// import wallet from './wallet';
+// import wallets from './wallet';
 
 dotenv.config();
 const web3Http = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/21d44f97cb3f4f2e8c113c76d05bbf77'));
@@ -94,7 +94,7 @@ function confirmEtherTransaction(txHash, confirmations = 1, wallet_address) {
 		}
 
 		return confirmEtherTransaction(txHash, confirmations, wallet_address);
-	}, 300 * 1000);
+	}, 120 * 1000);
 }
 
 function watchEtherTransfers() {
